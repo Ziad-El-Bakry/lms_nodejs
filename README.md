@@ -1,77 +1,121 @@
-# 📚 Library Management System (LMS) - Node.js & MySQL
+# 📚 Library Management System (LMS)
 
-This project is a simple Library Management System (LMS) built using Node.js and the Express framework. It utilizes EJS as the templating engine and MySQL for data persistence.
+A robust and simple **Library Management System** built with **Node.js**, **Express**, and **MySQL**. This application helps librarians manage books, members, and borrowing transactions efficiently with a responsive dashboard.
 
 ---
+
 ![Library Management System](public/screenshot.png)
-## ✨ Key Features
 
-* **Books Management:** Add, view, and track the status of all books.
-* **Members Management:** Register and view member details.
-* **Borrowing Management:** Record and manage loan check-out and return processes.
-* **Automatic Status Tracking:** Book status (`available`/`borrowed`) is updated automatically upon loan events.
-* **Overdue Detection:** Loan records are automatically marked as 'overdue' if the return date passes.
-* **Dashboard:** A central dashboard displaying real-time statistics (total books, active members, overdue loans).
+## ✨ Features
 
----
+### 🔹 Dashboard
+- Real-time statistics: Total Books, Active Members, Borrowed Books, and Overdue Returns.
+- Quick action buttons for common tasks.
 
-## 🛠️ Technology Stack
+### 🔹 Book Management 📖
+- **Add New Books:** Register new books with title, author, and category.
+- **View Inventory:** List all books with their current status (**Available** / **Borrowed**).
+- **Edit/Delete:** Update book details or remove them from the system.
+- **Auto-Status:** Book status updates automatically when borrowed or returned.
 
-| Technology | Role |
-| :--- | :--- |
-| **Backend** | Node.js |
-| **Framework** | Express.js |
-| **Database** | MySQL |
-| **DB Driver** | `mysql2` (with Promise support) |
-| **Templating** | EJS (Embedded JavaScript) |
-| **Styling** | Bootstrap 5.3 |
+### 🔹 Member Management 👥
+- **Register Members:** Add new library members with email and phone contact.
+- **View/Edit/Delete:** Manage member profiles easily.
 
----
-
-## ⚙️ Prerequisites
-
-You must have the following installed on your system to run this project:
-
-* **Node.js & npm:** (Version 18 or later is recommended).
-* **MySQL Server:** (e.g., XAMPP, WAMP, or MySQL Workbench).
+### 🔹 Borrowing System 🔄
+- **Checkout Process:** Issue books to members with a specific return date.
+- **Return Process:** Mark books as returned with a single click.
+- **Overdue Detection:** Automatically flags transactions as **Overdue** (Red Badge) if the return date has passed.
+- **Smart Validation:** Prevents borrowing books that are already out.
 
 ---
 
-## 🚀 Installation and Setup
+## 🛠️ Tech Stack
 
-Follow these steps to get the project running locally:
+- **Backend:** Node.js, Express.js
+- **Database:** MySQL
+- **Frontend:** EJS (Templating Engine), Bootstrap 5 (Styling)
+- **Database Driver:** `mysql2` (Promise-based)
 
-### 1. Database Configuration
+---
 
-1.  **Create Database:** Create a new database named `lms_node`.
-2.  **Import Schema:** Import the content of the **`lms_node.sql`** file into your newly created database.
-3.  **Verify Structure:** Ensure the `books` table contains the necessary `status` column. If you haven't run the fix previously, execute this SQL command:
-    ```sql
-    ALTER TABLE books ADD COLUMN status ENUM('available', 'borrowed') DEFAULT 'available';
-    UPDATE books SET status = 'available';
-    ```
+## ⚙️ Installation & Setup
 
-### 2. Configure Connection
+Follow these steps to get the project running on your local machine.
 
-* Verify that your **`db.js`** file contains the correct MySQL credentials (user, password, and database name).
-
-### 3. Install Dependencies
-
-In the project's root directory, run the installation command:
+### 1. Clone the Repository
 ```bash
-npm install
-
-
-## 4. Start the Server
-Launch the Express application:
-
+git clone [https://github.com/Ziad-El-Bakry/lms_nodejs.git](https://github.com/Ziad-El-Bakry/lms_nodejs.git)
+cd lms_nodejs
+2. Install Dependencies
 Bash
-node server.js
-The application will be accessible at: http://localhost:3000
 
-🗺️ Database Schema Overview
-The project relies on the following tables in the lms_node database:
-Table,      Purpose,                        Primary Columns
-books,      Stores book details,            "book_id, title, author, status"
-members,    Stores member information,      "member_id, name, email, phone"
-borrow,     Records loan transactions,      "borrow_id, member_id (FK), book_id (FK), status"
+npm install
+3. Database Configuration 🗄️
+Open phpMyAdmin or your MySQL workbench.
+
+Create a new database named lms_node.
+
+Import the provided lms_node.sql file.
+
+Important: Ensure the books table has the status column. Run this SQL command if needed:
+
+SQL
+
+ALTER TABLE books ADD COLUMN status ENUM('available', 'borrowed') DEFAULT 'available';
+UPDATE books SET status = 'available';
+Check db.js file and update your MySQL credentials if they differ from the default:
+
+JavaScript
+
+const pool = mysql.createPool({
+    host: 'localhost',
+    user: 'root',      // Your MySQL Username
+    password: '',      // Your MySQL Password
+    database: 'lms_node'
+});
+4. Run the Server
+Bash
+
+node server.js
+The server will start at: http://localhost:3000
+
+📂 Project Structure
+Bash
+
+lms-node/
+├── node_modules/
+├── public/
+│   ├── css/
+│   └── logo.png
+├── views/
+│   ├── partials/
+│   │   ├── head.ejs       # Common <head> section
+│   │   └── nav.ejs        # Navigation Bar
+│   ├── books.ejs          # Books management page
+│   ├── borrow.ejs         # Borrowing transactions page
+│   ├── index.ejs          # Dashboard (Home)
+│   └── members.ejs        # Members management page
+├── db.js                  # Database connection configuration
+├── lms_node.sql           # Database export file
+├── package.json           # Project dependencies
+├── server.js              # Main application entry point
+└── README.md              # Project documentation
+📸 Screenshots
+(You can add screenshots of your Dashboard, Books page, and Borrow page here later)
+
+🤝 Contributing
+Fork the repository.
+
+Create a new branch (git checkout -b feature-branch).
+
+Commit your changes.
+
+Push to the branch.
+
+Open a Pull Request.
+
+📝 License
+This project is open-source and available under the MIT License.
+
+Developed with ❤️ by Ziad El Bakry

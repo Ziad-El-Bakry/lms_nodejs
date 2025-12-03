@@ -8,19 +8,14 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
-// --- HOME PAGE ---
-
+// --- HOME PAGE (DASHBOARD) ---
 app.get('/', async (req, res) => {
     try {
-       
         const [bookCount] = await db.query('SELECT COUNT(*) as count FROM books');
-        
-        
         const [memberCount] = await db.query('SELECT COUNT(*) as count FROM members');
         const [borrowCount] = await db.query("SELECT COUNT(*) as count FROM borrow WHERE status = 'borrowed' OR status = 'overdue'");
         const [overdueCount] = await db.query("SELECT COUNT(*) as count FROM borrow WHERE status = 'overdue'");
 
-        // إرسال البيانات إلى ملف index.ejs
         res.render('index', {
             totalBooks: bookCount[0].count,
             totalMembers: memberCount[0].count,
@@ -29,16 +24,17 @@ app.get('/', async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        // في حالة الخطأ، نرسل أصفاراً لتجنب توقف الموقع
         res.render('index', { 
-            totalBooks: 0, 
-            totalMembers: 0, 
-            activeBorrows: 0, 
-            overdue: 0 
+            totalBooks: 0, totalMembers: 0, activeBorrows: 0, overdue: 0 
         });
     }
 });
-// --- BOOKS PAGE ---
+
+// =======================
+// --- BOOKS SECTION ---
+// =======================
+
+// 1. عرض الكتب
 app.get('/books', async (req, res) => {
     try { 
         const [rows] = await db.query('SELECT * FROM books');
@@ -49,10 +45,10 @@ app.get('/books', async (req, res) => {
     }
 });
 
+// 2. إضافة كتاب جديد
 app.post('/add-book', async (req, res) => {
     const { title, author, category } = req.body;
     try {
-        // إضافة الكتاب مع الحالة الافتراضية 'available'
         await db.query(
             "INSERT INTO books (title, author, category, status) VALUES (?, ?, ?, 'available')",
             [title, author, category]
@@ -64,10 +60,39 @@ app.post('/add-book', async (req, res) => {
     }
 });
 
-// --- MEMBERS PAGE ---
+// 3. تعديل كتاب (NEW)
+app.post('/update-book', async (req, res) => {
+    const { id, title, author, category } = req.body;
+    try {
+        await db.query(
+            'UPDATE books SET title = ?, author = ?, category = ? WHERE book_id = ?',
+            [title, author, category, id]
+        );
+        res.redirect('/books');
+    } catch (err) {
+        console.error(err);
+        res.send("Error updating book");
+    }
+});
+
+// 4. حذف كتاب (NEW)
+app.post('/delete-book/:id', async (req, res) => {
+    try {
+        await db.query('DELETE FROM books WHERE book_id = ?', [req.params.id]);
+        res.redirect('/books');
+    } catch (err) {
+        console.error(err);
+        res.send("Error deleting book");
+    }
+});
+
+// =======================
+// --- MEMBERS SECTION ---
+// =======================
+
+// 1. عرض الأعضاء
 app.get('/members', async (req, res) => {
     try {
-        // تم تصحيح اسم الجدول من member إلى members
         const [rows] = await db.query('SELECT * FROM members');
         res.render('members', { members: rows });
     } catch (err) {
@@ -76,6 +101,7 @@ app.get('/members', async (req, res) => {
     }
 });
 
+// 2. إضافة عضو جديد
 app.post('/add-member', async (req, res) => {
     const { name, email, phone } = req.body;
     try {
@@ -90,7 +116,36 @@ app.post('/add-member', async (req, res) => {
     }
 });
 
-// --- BORROW PAGE ---
+// 3. تعديل عضو (NEW)
+app.post('/update-member', async (req, res) => {
+    const { id, name, email, phone } = req.body;
+    try {
+        await db.query(
+            'UPDATE members SET name = ?, email = ?, phone = ? WHERE member_id = ?',
+            [name, email, phone, id]
+        );
+        res.redirect('/members');
+    } catch (err) {
+        console.error(err);
+        res.send("Error updating member");
+    }
+});
+
+// 4. حذف عضو (NEW)
+app.post('/delete-member/:id', async (req, res) => {
+    try {
+        await db.query('DELETE FROM members WHERE member_id = ?', [req.params.id]);
+        res.redirect('/members');
+    } catch (err) {
+        console.error(err);
+        res.send("Error deleting member");
+    }
+});
+
+// =======================
+// --- BORROW SECTION ---
+// =======================
+
 app.get('/borrow', async (req, res) => {
     try {
         // تحديث حالة الكتب المتأخرة
@@ -101,7 +156,7 @@ app.get('/borrow', async (req, res) => {
             AND status = 'borrowed'
         `);
 
-        // جلب بيانات الاستعارة مع أسماء مستعارة (Aliases) لتناسب ملف العرض borrow.ejs
+        // جلب بيانات الاستعارة
         const [borrows] = await db.query(`
             SELECT 
                 b.borrow_id AS id,
@@ -126,7 +181,7 @@ app.get('/borrow', async (req, res) => {
     }
 });
 
-// --- ADD BORROW ---
+// إضافة استعارة جديدة
 app.post('/add-borrow', async (req, res) => {
     const { member_id, book_id, borrow_date, return_date } = req.body;
 
@@ -140,7 +195,6 @@ app.post('/add-borrow', async (req, res) => {
         );
 
         // 2. تحديث حالة الكتاب إلى 'borrowed'
-        // هذا السطر كان يسبب الخطأ سابقاً بسبب عدم وجود عمود status
         await db.query(
             `UPDATE books SET status = 'borrowed' WHERE book_id = ?`,
             [book_id]
@@ -153,24 +207,21 @@ app.post('/add-borrow', async (req, res) => {
     }
 });
 
-// --- RETURN BOOK ---
+// إرجاع كتاب
 app.post('/return-book/:id', async (req, res) => {
     const borrow_id = req.params.id;
 
     try {
-        // معرفة الكتاب المرتبط بعملية الاستعارة
         const [borrow] = await db.query(
             'SELECT book_id FROM borrow WHERE borrow_id = ?',
             [borrow_id]
         );
 
-        // تحديث حالة الاستعارة إلى 'returned'
         await db.query(
             `UPDATE borrow SET status = 'returned' WHERE borrow_id = ?`,
             [borrow_id]
         );
 
-        // إعادة الكتاب إلى حالة 'available'
         if (borrow.length > 0) {
             await db.query(
                 `UPDATE books SET status = 'available' WHERE book_id = ?`,
@@ -185,6 +236,7 @@ app.post('/return-book/:id', async (req, res) => {
     }
 });
 
+// --- START SERVER ---
 app.listen(3000, () => {
     console.log("LMS running at http://localhost:3000");
 });
