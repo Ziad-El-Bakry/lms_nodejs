@@ -4,7 +4,12 @@ A robust and simple **Library Management System** built with **Node.js**, **Expr
 
 ---
 
-![Library Management System](public/screenshot.png)
+(![Dashboard](public/screenshot.png)
+![Books](public/books.png)
+![Members](public/members.png)
+![Borrows](public/borrow.png)
+)
+
 
 ## ✨ Features
 
