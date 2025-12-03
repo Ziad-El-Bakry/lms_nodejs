@@ -4,12 +4,7 @@ A robust and simple **Library Management System** built with **Node.js**, **Expr
 
 ---
 
-(![Dashboard](public/screenshot.png)
-![Books](public/books.png)
-![Members](public/members.png)
-![Borrows](public/borrow.png)
-)
-
+![Library Management System](public/screenshot.png)
 
 ## ✨ Features
 
@@ -107,13 +102,7 @@ lms-node/
 ├── server.js              # Main application entry point
 └── README.md   
            # Project documentation
-📸 Screenshots
 
-(![Dashboard](public/screenshot.png)
-![Books](public/books.png)
-![Members](public/members.png)
-![Borrows](public/borrow.png)
-)
 
 🤝 Contributing
 Fork the repository.
