@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Members</title>
+    <%- include('partials/head') %>
+    <%- include('partials/nav') %>
+</head>
+<body class="container mt-4"> 
+    <h2>Member List</h2>
+    
+    <div class="card p-3 mb-4 bg-light">
+        <h5>Register New Member</h5>
+        <form action="/add-member" method="POST" class="row g-3">
+            <div class="col-md-4"><input type="text" name="name" class="form-control" placeholder="Full Name" required></div>
+            <div class="col-md-4"><input type="email" name="email" class="form-control" placeholder="Email" required></div>
+            <div class="col-md-3"><input type="text" name="phone" class="form-control" placeholder="Phone" required></div>
+            <div class="col-md-1"><button type="submit" class="btn btn-success">Add</button></div>
+        </form>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th></tr>
+        </thead>
+        <tbody>
+            <% members.forEach(member => { %>
+                <tr>
+                    <td><%= member.member_id %></td>
+                    <td><%= member.name %></td>
+                    <td><%= member.email %></td>
+                    <td><%= member.phone %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

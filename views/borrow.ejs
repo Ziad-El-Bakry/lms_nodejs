@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Borrowing</title>
+
+        <%- include('partials/head') %>
+
+</head>
+
+<body class="container mt-4"> <%- include('partials/nav') %>
+
+    <h2>Borrowing Records</h2>
+   
+
+    <!-- Checkout Form -->
+    <div class="card p-3 mb-4 bg-light">
+        <h5>Checkout Book</h5>
+        <form action="/add-borrow" method="POST" class="row g-3">
+
+            <div class="col-md-3">
+                <label>Member</label>
+                <select name="member_id" class="form-select" required>
+                    <% members.forEach(m => { %>
+                        <option value="<%= m.member_id %>"><%= m.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label>Book</label>
+                <select name="book_id" class="form-select" required>
+                    <% books.forEach(b => { %>
+                        <option value="<%= b.book_id %>"><%= b.title %></option>
+                    <% }) %>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label>Borrow Date</label>
+                <input type="date" name="borrow_date" class="form-control" required>
+            </div>
+
+            <div class="col-md-2">
+                <label>Return Date</label>
+                <input type="date" name="return_date" class="form-control" required>
+            </div>
+
+            <div class="col-md-2 align-self-end">
+                <button type="submit" class="btn btn-warning w-100">Confirm</button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Borrow Records Table -->
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Member Name</th>
+                <th>Book Title</th>
+                <th>Borrowed</th>
+                <th>Return</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% borrows.forEach(b => { %>
+                <tr>
+                    <td><%= b.id %></td>
+                    <td><%= b.member_name %></td>
+                    <td><%= b.book_title %></td>
+                    <td><%= b.borrowed ? b.borrowed.toLocaleDateString('en-GB') : '' %></td>
+                    <td><%= b.return_date ? b.return_date.toLocaleDateString('en-GB') : '' %></td>
+
+                    <td>
+                        <% 
+                            let badgeClass = "badge-borrowed";
+                            let text = "Borrowed";
+
+                            if (b.status === "returned") {
+                                badgeClass = "badge-returned";
+                                text = "Returned";
+                            } 
+                            else if (b.status === "overdue") {
+                                badgeClass = "badge-overdue";
+                                text = "Overdue";
+                            }
+                        %>
+
+                        <span class="badge <%= badgeClass %>"><%= text %></span>
+                    </td>
+
+                    <td>
+                        <% if (b.status !== "returned") { %>
+                            <form action="/return-book/<%= b.id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-success btn-sm">Mark Returned</button>
+                            </form>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+</body>
+</html>
