@@ -100,9 +100,15 @@ lms-node/
 ├── lms_node.sql           # Database export file
 ├── package.json           # Project dependencies
 ├── server.js              # Main application entry point
-└── README.md              # Project documentation
+└── README.md   
+           # Project documentation
 📸 Screenshots
-(You can add screenshots of your Dashboard, Books page, and Borrow page here later)
+
+(![Dashboard](public/screenshot.png)
+![Books](public/books.png)
+![Members](public/members.png)
+![Borrows](public/borrow.png)
+)
 
 🤝 Contributing
 Fork the repository.

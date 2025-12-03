@@ -39,12 +39,7 @@ CREATE TABLE `books` (
 -- Dumping data for table `books`
 --
 
-INSERT INTO `books` (`book_id`, `title`, `author`, `category`, `status`) VALUES
-(1, 'Data Base Advanced', 'Hazem El Bakry', 'Technology', 'available'),
-(2, 'Psychological complexes are your eternal prison', 'Mark Johnathon', 'Psychology', 'borrowed'),
-(3, 'احاديث', 'مصطفي محمود', 'ديني', 'available'),
-(4, 'Mastering CSS3', 'Code Book', 'Programming', 'available'),
-(5, 'Mastering HTML ', 'Code Book', 'Programming', 'borrowed');
+
 
 -- --------------------------------------------------------
 
@@ -65,16 +60,7 @@ CREATE TABLE `borrow` (
 -- Dumping data for table `borrow`
 --
 
-INSERT INTO `borrow` (`borrow_id`, `member_id`, `book_id`, `borrow_date`, `return_date`, `status`) VALUES
-(1, 1, 1, '2025-10-20', '2025-10-24', 'returned'),
-(2, 2, 2, '2025-10-21', '2025-10-25', 'returned'),
-(3, 2, 1, '2025-12-23', '2025-12-10', 'returned'),
-(4, 3, 2, '2025-12-03', '2025-12-10', 'returned'),
-(5, 4, 3, '2025-11-25', '2025-11-26', 'returned'),
-(6, 1, 3, '2020-12-01', '2025-12-02', 'returned'),
-(7, 1, 2, '2025-12-04', '2025-12-05', 'returned'),
-(8, 3, 2, '2025-12-03', '2025-12-05', 'borrowed'),
-(9, 5, 5, '2025-12-03', '2025-12-04', 'borrowed');
+
 
 -- --------------------------------------------------------
 
@@ -108,13 +94,7 @@ CREATE TABLE `members` (
 -- Dumping data for table `members`
 --
 
-INSERT INTO `members` (`member_id`, `name`, `email`, `phone`) VALUES
-(1, 'Ziad El Bakry', 'zezomamdouh12@gmail.com', '01152602002'),
-(2, 'Eslam Maher', 'eslammaher152@gmail.com', '01152602006'),
-(3, 'jana Ahmed', 'misonahmed12@gmail.com', '01129650122'),
-(4, 'Omar Maher', 'omarmaher@gmail.com', '01123456789'),
-(5, 'Mamdouh El Bakry', 'zezomamdouh612@gmail.com', '01120475790'),
-(6, 'Youseff magdy', 'youseffmag12@gmail.com', '01145678913');
+
 
 -- --------------------------------------------------------
 
