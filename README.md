@@ -3,7 +3,7 @@
 This project is a simple Library Management System (LMS) built using Node.js and the Express framework. It utilizes EJS as the templating engine and MySQL for data persistence.
 
 ---
-
+![Library Management System](public/screenshot.png)
 ## ✨ Key Features
 
 * **Books Management:** Add, view, and track the status of all books.
